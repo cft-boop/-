@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
-import Layout from './components/Layout';
-import ProjectCard from './components/ProjectCard';
-import ProjectCharts from './components/ProjectCharts';
-import { Project, ProjectStats } from './types';
-import { getCurrentISO } from './utils/dateUtils';
+import Layout from './components/Layout.tsx';
+import ProjectCard from './components/ProjectCard.tsx';
+import ProjectCharts from './components/ProjectCharts.tsx';
+import { Project, ProjectStats } from './types.ts';
+import { getCurrentISO } from './utils/dateUtils.ts';
 
 const STORAGE_KEY = 'workflow_kst_projects';
 
@@ -13,13 +13,15 @@ const App: React.FC = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [newProject, setNewProject] = useState({ name: '', description: '', deadline: '' });
 
-  // Persistence
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
-      setProjects(JSON.parse(saved));
+      try {
+        setProjects(JSON.parse(saved));
+      } catch (e) {
+        console.error("Failed to parse local projects", e);
+      }
     } else {
-      // Mock initial data
       const initialProjects: Project[] = [
         {
           id: '1',
@@ -86,10 +88,8 @@ const App: React.FC = () => {
 
   return (
     <Layout>
-      {/* Charts Section */}
       <ProjectCharts data={projectStats} />
 
-      {/* Control Bar */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <h3 className="text-xl font-bold text-slate-800">Active Workstreams</h3>
         <button 
@@ -101,7 +101,6 @@ const App: React.FC = () => {
         </button>
       </div>
 
-      {/* Grid of Projects */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {projects.map(project => (
           <ProjectCard 
@@ -113,10 +112,9 @@ const App: React.FC = () => {
         ))}
       </div>
 
-      {/* Add Project Modal */}
       {showAddForm && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden">
             <div className="p-8">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold text-slate-800">Initiate Project</h2>

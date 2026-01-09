@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
-import { Project, Task } from '../types';
-import { formatToKST, getCurrentISO } from '../utils/dateUtils';
-import { generateSuggestedTasks } from '../services/geminiService';
+import { Project, Task } from '../types.ts';
+import { formatToKST, getCurrentISO } from '../utils/dateUtils.ts';
+import { generateSuggestedTasks } from '../services/geminiService.ts';
 
 interface ProjectCardProps {
   project: Project;
@@ -88,8 +88,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onUpdateProject, onD
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-md transition group">
-      <div className="p-6">
+    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-md transition group h-full flex flex-col">
+      <div className="p-6 flex-1">
         <div className="flex justify-between items-start mb-4">
           <div>
             <h4 className="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition">{project.name}</h4>
@@ -105,7 +105,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onUpdateProject, onD
           </div>
         </div>
 
-        {/* Progress Bar */}
         <div className="mb-6">
           <div className="flex justify-between text-xs font-bold mb-2">
             <span className="text-slate-600 uppercase tracking-tighter">Current Progress</span>
@@ -119,8 +118,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onUpdateProject, onD
           </div>
         </div>
 
-        {/* Detailed Task List */}
-        <div className="space-y-3 mb-6 max-h-[200px] overflow-y-auto pr-2 custom-scrollbar">
+        <div className="space-y-3 mb-6 max-h-[160px] overflow-y-auto pr-2 custom-scrollbar">
           <h5 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Tasks & Checklist</h5>
           {project.tasks.length === 0 ? (
             <p className="text-sm text-slate-400 italic">No tasks assigned yet.</p>
@@ -141,7 +139,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onUpdateProject, onD
           )}
         </div>
 
-        {/* Action Buttons */}
         <button 
           onClick={handleAiSuggest}
           disabled={isGenerating}
